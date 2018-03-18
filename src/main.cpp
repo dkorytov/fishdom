@@ -52,7 +52,8 @@ int main(int argc, char** argv){
   wc.grid_dy = 100;
   wc.struct_to_plant_eating = .2*mt;
   wc.struct_to_max_plant_eating = 1.0*mt;
-  wc.struct_to_max_fish_mass=1.0*mt;
+  wc.struct_to_max_fish_mass=10;
+  wc.mass_to_reach = 1.0;
   wc.fish_to_energy_efficiency=1.0;
   
   wc.plant_diffusion_coef = 0.0001*mt;
@@ -60,7 +61,8 @@ int main(int argc, char** argv){
   wc.plant_growth_linear = 1*mt;
 
   World world(wc);
-  world.add_fish(1);
+  world.add_fish(100);
+  world.add_pred(1);
   auto fishs = world.get_fish_states();
   for(size_t i =0;i<fishs.size();++i){
     std::cout<<"fish "<<fishs[i].fish_id<<" pos: "<<fishs[i].pos.x<<" "<<fishs[i].pos.y<<std::endl;

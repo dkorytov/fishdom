@@ -3,7 +3,6 @@
 
 #include "util.hpp"
 #include "behavior.hpp"
-#include "fish_state.hpp"
 #include "definitions.hpp"
 /*enum FishType{
   herb,
@@ -21,6 +20,7 @@ struct FishState{
   Vect vel;
   Vect force;
   bool dead;
+  bool is_predator;
   Behavior* bhvr;
   std::string to_string();
   void from_string(std::string);
@@ -54,8 +54,8 @@ class Fish{
   bool dead=false;
   const WorldConsts& wc;
 public:
-  Fish(int id,const WorldConsts& wc);
-  Fish(FishState& fs,const WorldConsts& wc);
+  Fish(int id, const WorldConsts& wc);
+  Fish(int id, FishState& fs, const WorldConsts& wc);
   void convert_energy_to_struct(float mass);
   void convert_energy_to_muscle(float mass);
   void convert_struct_to_energy(float mass);
@@ -100,7 +100,9 @@ public:
   bool is_herbivore() const;
   bool is_predator() const;
   void kill();
-
+  int get_id() const{
+    return fish_id;
+  };
 };
 
 

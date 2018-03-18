@@ -175,11 +175,12 @@ void Predator::sense_world(Fish* fish, World* world, float dt){
     if(fish1 != fish && !fish1->is_dead()){
       Vect dist = world->dist(fish1->get_pos(),fish->get_pos());
       float mag = vabs(dist)+15;
-      Vect f = unit(dist)/(mag*mag);
-      planned_force += f*-1000;
+      Vect f = unit(dist);
+      planned_force += f*0.01;
     }
     ++it;
   }
+  fish->set_force(planned_force);
 }
 void Predator::grow_fish(Fish* fish,World* world, float dt){
   float fat, muscle, mouth;

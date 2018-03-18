@@ -2,7 +2,7 @@
 #include <iostream>
 #include <math.h>
 #include "world_view.hpp"
-#include "fish_state.hpp"
+
 WorldView::WorldView(World* world):world(world){
   Glib::signal_timeout().connect( sigc::mem_fun(*this, &WorldView::on_timeout), 100 );
 }
@@ -10,33 +10,33 @@ WorldView::~WorldView(){
   
 }
 bool WorldView::on_draw(const Cairo::RefPtr<Cairo::Context>& cr){
-  draw_plant(world->plant_grid,cr);
-  draw_plant_grad(world->del_plant_grid,cr);
-  std::vector<FishState> fish_states = world->get_fish_states();
-  cr->save();
-  cr->translate(100,100);
-  Pango::FontDescription font;
-  //font.set_family("Monospace");
-  font.set_weight(Pango::WEIGHT_BOLD);
+  //draw_plant_grad(world->del_plant_grid,cr);
+  // cr->save();
+  // cr->translate(100,100);
+  // Pango::FontDescription font;
+  // //font.set_family("Monospace");
+  // font.set_weight(Pango::WEIGHT_BOLD);
   // http://developer.gnome.org/pangomm/unstable/classPango_1_1Layout.html
 
-  float angle =0; 
-  angle+=world->time/M_PI/2.0;
-  Vect v(angle);
+  // float angle =0; 
+  // angle+=world->time/M_PI/2.0;
+  // Vect v(angle);
 
-  std::stringstream ss;
-  ss<<world->time<<" "<<v.angle()<<std::endl;
-  auto layout = create_pango_layout(ss.str());
+  // std::stringstream ss;
+  // ss<<world->time<<" "<<v.angle()<<std::endl;
+  // auto layout = create_pango_layout(ss.str());
 
-  layout->set_font_description(font);
-  layout->show_in_cairo_context(cr);
+  // layout->set_font_description(font);
+  // layout->show_in_cairo_context(cr);
   
-  cr->translate(100,100);
-  cr->rotate(angle);
-  cr->line_to(0,0);
-  cr->line_to(100,0);
-  cr->stroke();
-  cr->restore();
+  // cr->translate(100,100);
+  // cr->rotate(angle);
+  // cr->line_to(0,0);
+  // cr->line_to(100,0);
+  // cr->stroke();
+  // cr->restore();
+  draw_plant(world->plant_grid,cr);
+  std::vector<FishState> fish_states = world->get_fish_states();
   for(auto itf = fish_states.begin();itf!=fish_states.end();++itf){
     FishState* fs = &*itf;
     draw_fish(fs,cr);
@@ -49,10 +49,13 @@ void WorldView::draw_fish(const FishState* fs, const Cairo::RefPtr<Cairo::Contex
   float radius = pow((3.0*fs->fat_mass)/(4.0*M_PI*world->fish_mass_density),1.0/3.0);
   //4/3pi r^3
   if(fs->dead){
-    cr->set_source_rgb(0.0,0.3,0.3);
+    cr->set_source_rgb(0.0, 0.3, 0.3);
+  }
+  else if(fs->is_predator){
+    cr->set_source_rgb(0.6, 0.1, 0.1);
   }
   else{
-    cr->set_source_rgb(0.1,0.1,0.6);
+    cr->set_source_rgb(0.1, 0.1, 0.6);
   }
   //cr->translate(fs->pos.x,fs->pos.y);
   cr->translate(fs->pos.x,fs->pos.y);

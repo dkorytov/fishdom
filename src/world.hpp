@@ -4,7 +4,7 @@
 #include <map>
 #include <vector>
 #include "fish.hpp"
-#include "fish_state.hpp"
+
 
 class World{
 public:
@@ -28,6 +28,7 @@ public:
   void add_fish(Fish* fish);
   void remove_fish(Fish* fish);
   void add_fish(int num);
+  void add_pred(int num);
   void plant_ij_from_pos(Vect pos, int& i, int& j);
   void wrap_plant_ij(int& i, int& j);
   float get_plant(int i, int j);

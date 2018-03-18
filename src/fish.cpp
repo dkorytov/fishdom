@@ -17,6 +17,7 @@ void FishState::set(Fish* fish){
   vel=fish->vel;
   force=fish->get_force();
   dead = fish->is_dead();
+  is_predator = fish->is_predator();
   return;
 }
 
@@ -37,7 +38,7 @@ Fish::Fish(int id,const WorldConsts& wc):fish_id(id),
   dead = false;
 }
 
-Fish::Fish(FishState& fs,const WorldConsts& wc):wc(wc){
+Fish::Fish(int id, FishState& fs,const WorldConsts& wc):fish_id(id),wc(wc){
   fish_id = fs.fish_id;
   structure_mass = fs.struct_mass;
   muscle_mass = fs.muscle_mass;
@@ -62,6 +63,7 @@ void Fish::eat_fish(Fish* f){
   float energy_struct = f->get_structure_mass() * wc.struct_mass_to_energy;
   float energy_muscle = f->get_muscle_mass() * wc.muscle_mass_to_energy;
   float total_energy = (energy_fat + energy_struct + energy_muscle) * wc.fish_to_energy_efficiency;
+  std::cout<<"total energy:"<<total_energy<<std::endl;
   this->fat_mass += total_energy * wc.energy_to_fat_mass;
   f->kill();
 }
@@ -184,17 +186,16 @@ Fish* Fish::reproduce(float struct_mass, float muscle_mass, float energy_mass, B
   fs.vel = vel;
   fs.dead = false;
   fs.bhvr = bhvr;
-  Fish* baby = new Fish(fs, wc);
+  //TODO add id;
+  Fish* baby = new Fish(0, fs, wc);
   return baby;
 }
-
 bool Fish::can_eat_by_size(Fish* f){
-  return structure_mass > f->get_mass() * wc.struct_to_max_fish_mass;
+  return structure_mass * wc.struct_to_max_fish_mass > f->get_mass() ; 
 }
 void Fish::kill(){
   dead = true;
 }
-
 bool Fish::is_herbivore() const{
   return bhvr->is_herbivore();
 }

@@ -4,7 +4,6 @@
 #include <gtkmm/drawingarea.h>
 
 #include "world.hpp"
-#include "fish_state.hpp"
 class WorldView : public Gtk::DrawingArea{
   World* world;
 public:
