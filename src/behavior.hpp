@@ -24,7 +24,7 @@ public:
   Vect get_planned_force();
 };
 
-class RandomWalk:public Behavior{
+class RandomWalker:public Behavior{
   virtual void sense_world(Fish* fish, World* world,float dt);
   virtual void grow_fish(Fish* fish,World* world, float dt);
   virtual bool is_predator();
@@ -45,10 +45,12 @@ class Predator: public Behavior{
   virtual bool is_predator();
   virtual bool is_herbivore();
 };
+
 class NNHerb: public Behavior{
   virtual void sense_world(Fish* self, World* world, float dt);
   virtual void grow_fish(Fish* fish,World* world, float dt);
 };
+
 class NNPred: public Behavior{
   virtual void sense_world(Fish* self, World* world, float dt);
   virtual void grow_fish(Fish* fish,World* world, float dt);

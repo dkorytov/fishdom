@@ -10,6 +10,7 @@ struct WorldConsts{
   float energy_to_muscle_mass;
   float energy_to_struct_mass;
   float energy_to_fat_mass;
+  
   float muscle_mass_to_energy;
   float struct_mass_to_energy;
   float fat_mass_to_energy;

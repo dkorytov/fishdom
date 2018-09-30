@@ -106,5 +106,8 @@ float vabs(const Vect v){
 
 Vect unit( Vect v){
   float mag = vabs(v);
-  return v/mag;
+  if(mag != 0)
+    return v/mag;
+  else
+    return v;
 }

@@ -38,7 +38,7 @@ Fish::Fish(int id,const WorldConsts& wc):fish_id(id),
   dead = false;
 }
 
-Fish::Fish(int id, FishState& fs,const WorldConsts& wc):fish_id(id),wc(wc){
+Fish::Fish(FishState& fs,const WorldConsts& wc):wc(wc){
   fish_id = fs.fish_id;
   structure_mass = fs.struct_mass;
   muscle_mass = fs.muscle_mass;
@@ -169,7 +169,7 @@ void Fish::convert_struct_to_energy(float mass){
     }
   }
 }
-Fish* Fish::reproduce(float struct_mass, float muscle_mass, float energy_mass, Behavior* bhvr){
+Fish* Fish::reproduce(int new_id, float struct_mass, float muscle_mass, float energy_mass, Behavior* bhvr){
   float required_energy  = 0;
   required_energy+= struct_mass/wc.energy_to_struct_mass
     +muscle_mass/wc.energy_to_muscle_mass
@@ -186,11 +186,11 @@ Fish* Fish::reproduce(float struct_mass, float muscle_mass, float energy_mass, B
   fs.vel = vel;
   fs.dead = false;
   fs.bhvr = bhvr;
-  //TODO add id;
-  Fish* baby = new Fish(0, fs, wc);
+  fs.fish_id = new_id;
+  Fish* baby = new Fish(fs, wc);
   return baby;
 }
-bool Fish::can_eat_by_size(Fish* f){
+bool Fish::can_eat_by_size(const Fish* f) const{
   return structure_mass * wc.struct_to_max_fish_mass > f->get_mass() ; 
 }
 void Fish::kill(){

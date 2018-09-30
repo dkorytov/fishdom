@@ -5,9 +5,8 @@
 int wrap_i(int i,int max_i){
  return ((i%max_i)+max_i)%max_i;
 }
-World::World(const WorldConsts& wc):wc(wc),
-				    time(0),
-				    time_step(0){
+World::World(const WorldConsts& wc):
+  wc(wc),time(0),time_step(0),fish_num(0){
   float ij_product = wc.grid_x_size*wc.grid_y_size;
   plant_grid.resize(wc.grid_x_size);
   del_plant_grid.resize(wc.grid_x_size);
@@ -24,13 +23,12 @@ void World::add_fish(int num){
   std::cout<<"adding fish"<<std::endl;
   for(int i =0;i<num;++i){
     std::cout<<"\t"<<i<<std::endl;
-    Fish* fish = new Fish(i,wc);
-    fish->set_behavior(new RandomWalk());
-    //fish->move_to(i*70,i*80);
+    Fish* fish = new Fish(fish_num++,wc);
+    fish->set_behavior(new GradientWalker());
     fish->move_to(wc.world_x_len*uniform_random(),wc.world_y_len*uniform_random());
     FishState fs(fish);
-    //std::cout<<world_consts.world_x_len<<"->"<<fs.pos.x<<" "<<world_consts.world_y_len<<"->"<<fs.pos.y<<std::endl;
-    all_fish.emplace(fish_num++,fish);
+    add_fish(fish);
+    //all_fish.emplace(fish_num++,fish);
   }
 }
 void World::add_pred(int num){
@@ -38,24 +36,32 @@ void World::add_pred(int num){
   for(int i =0;i<num;++i){
     std::cout<<"\t"<<i<<std::endl;
     FishState fs;
-    fs.struct_mass = 10.0;
-    fs.muscle_mass = 20.0;
-    fs.fat_mass = 10.0;
-    Fish* fish = new Fish(i,fs,wc);
+    fs.struct_mass = 5.0;
+    fs.muscle_mass = 10.0;
+    fs.fat_mass = 5.0;
+    fs.fish_id = fish_num++;
+    Fish* fish = new Fish(fs,wc);
+    std::cout<<"fish_id: "<<fish->get_id()<<std::endl;
     fish->set_behavior(new Predator());
     //fish->move_to(i*70,i*80);
     fish->move_to(wc.world_x_len*uniform_random(),wc.world_y_len*uniform_random());
     //std::cout<<world_consts.world_x_len<<"->"<<fs.pos.x<<" "<<world_consts.world_y_len<<"->"<<fs.pos.y<<std::endl;
-    all_fish.emplace(fish_num++,fish);
+    
+    add_fish(fish);
   }
 }
 void World::add_fish(Fish* fish){
   if(fish!=NULL){
     std::cout<<"adding fish2"<<fish->get_pos()<<std::endl;
-    all_fish.emplace(fish_num++,fish);
+    std::cout<<fish->get_id()<<std::endl;
+    all_fish.emplace(fish->get_id(),fish);
   }
 }
+int  World::get_fish_id(){
+  return fish_num++;
+}
 void World::remove_fish(Fish* fish){
+  std::cout<<"dead id: "<<fish->get_id()<<std::endl;
   all_fish.erase(fish->get_id());
 }
 std::vector<FishState> World::get_fish_states(){
@@ -173,7 +179,7 @@ void World::step_interact_fish(float dt){
 	    float reach = wc.mass_to_reach * f->get_mass();
 	    //float max_mass = wc->struct_to_max_fish_mass * f->get_struct_mass();
 	    if(vabs(dist(f->get_pos(),f2->get_pos())) < reach &&
-	       f->can_eat_by_size(f2)){
+	       f->can_eat_by_size(f2) && !f2->is_predator()){
 	      f->eat_fish(f2);
 	      remove_fish(f2);
 	    }

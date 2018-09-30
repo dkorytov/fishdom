@@ -15,7 +15,6 @@ struct RunWorldParam{
   int total_time;
 };
 
-
 void run_world(World* wc, RunWorldParam* param){
   int sleep = 1000*param->sleep_time;
   for(int i =0;i<param->total_time;++i){
@@ -28,22 +27,25 @@ void run_world(World* wc, RunWorldParam* param){
 
 int main(int argc, char** argv){
   std::cout<<"This is the begining of the fishdom program :)"<<std::endl;
-  float mt = 1.; //factor to increase motabalism/eating
+  float mt = 10.0; //factor to increase motabalism/eating
   WorldConsts wc;
   wc.max_plant_density = 256;
   wc.max_plant_density_for_eating=128;
   wc.linear_drag = 30.5;
-  wc.quad_drag  = .2;             
+  wc.quad_drag  = 2.2;             
   wc.energy_to_force = 1;       
                          
-  wc.energy_to_muscle_mass =.1;
-  wc.energy_to_struct_mass =.5;
-  wc.muscle_mass_to_energy =0.5; 
-  wc.struct_mass_to_energy =0.0;
-  wc.daily_muscle_cost = 0.1*mt;     
+  wc.energy_to_muscle_mass = 0.1;
+  wc.energy_to_struct_mass = 0.5;
+  wc.energy_to_fat_mass    = 1.0;
+  wc.muscle_mass_to_energy = 0.5; 
+  wc.struct_mass_to_energy = 0.0;
+  wc.fat_mass_to_energy = 1.0;
+    
+  wc.daily_muscle_cost = 0.5*mt;     
   wc.daily_struct_cost = 0.05*mt;     
   wc.daily_fat_cost = 0.001*mt;
-  wc.muscle_efficiency = 300.0*mt;
+  wc.muscle_efficiency = 20.0*mt;
   wc.world_x_len = 1000;
   wc.world_y_len = 1000;
   wc.grid_x_size = 10;
@@ -75,11 +77,11 @@ int main(int argc, char** argv){
   world_view.show();
 
   std::thread t;
-  float factor=6;
+  float factor=1;
   RunWorldParam param;
-  param.sleep_time =0.005*factor;
+  param.sleep_time =0.001*factor;
   param.total_time = 1000000;
-  param.dt = 0.01*factor;
+  param.dt = 0.001*factor;
   t=std::thread(run_world,&world,&param);
   app->run(window);
   t.join();

@@ -15,7 +15,7 @@ public:
   std::vector<std::vector<Vect> > del_plant_grid;
   float time;
   int time_step;
-  int fish_num=0;
+  int fish_num;
 public:
   World(const WorldConsts& wc);
   void step(float dt);
@@ -26,6 +26,7 @@ public:
   void step_fish_sense(float dt);
   void step_grow_fish(float dt);
   void add_fish(Fish* fish);
+  int  get_fish_id();
   void remove_fish(Fish* fish);
   void add_fish(int num);
   void add_pred(int num);

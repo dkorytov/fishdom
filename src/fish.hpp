@@ -4,10 +4,6 @@
 #include "util.hpp"
 #include "behavior.hpp"
 #include "definitions.hpp"
-/*enum FishType{
-  herb,
-  carn
-  };*/
 
 class Fish;
 struct FishState{
@@ -55,7 +51,7 @@ class Fish{
   const WorldConsts& wc;
 public:
   Fish(int id, const WorldConsts& wc);
-  Fish(int id, FishState& fs, const WorldConsts& wc);
+  Fish(FishState& fs, const WorldConsts& wc);
   void convert_energy_to_struct(float mass);
   void convert_energy_to_muscle(float mass);
   void convert_struct_to_energy(float mass);
@@ -63,9 +59,9 @@ public:
   void eat_fish(Fish* fish); //this fish has eaten fish f.
   void eat_plant(float& plant,float dt);
   void motabilise_energy(float dt); //
-  bool can_eat_by_size(Fish* f);
+  bool can_eat_by_size(const Fish* f) const;
   void recalculate_mass();
-  Fish* reproduce(float struct_mass, float muscle_mass, float fat_mass, Behavior* bhvr); //produces an new fish asexually <-genes will vary a bit
+  Fish* reproduce(int id, float struct_mass, float muscle_mass, float fat_mass, Behavior* bhvr); //produces an new fish asexually <-genes will vary a bit
   Fish* reproduce(Fish* mate); //produce a new fish sexually <- will be implemented later
   
   
