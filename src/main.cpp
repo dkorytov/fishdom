@@ -48,8 +48,8 @@ int main(int argc, char** argv){
   wc.muscle_efficiency = 20.0*mt;
   wc.world_x_len = 1000;
   wc.world_y_len = 1000;
-  wc.grid_x_size = 10;
-  wc.grid_y_size = 10;
+  wc.grid_x_size = 25;
+  wc.grid_y_size = 25;
   wc.grid_dx = 100;
   wc.grid_dy = 100;
   wc.struct_to_plant_eating = .2*mt;

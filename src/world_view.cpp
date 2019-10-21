@@ -131,8 +131,8 @@ void WorldView::draw_plant_grad(const std::vector<std::vector<Vect> > d_plant,co
       float dx,dy;
       dx = d_plant[i][j].x;
       dy = d_plant[i][j].y;
-      cr->line_to(100*i+50,100*j+50);
-      cr->line_to(100*i+50+dx*50,100*j+50+dy*50);
+      cr->line_to(100*i+50, 100*j+50);
+      cr->line_to(100*i+50+dx*50, 100*j+50+dy*50);
       cr->stroke();
     }
   }

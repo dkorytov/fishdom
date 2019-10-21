@@ -159,6 +159,7 @@ void World::step_move_fish(float dt){
 }
 void World::step_interact_fish(float dt){
   auto it = all_fish.begin();
+  std::vector<Fish*> to_remove;
   while(it != all_fish.end()){
     int i,j;
     Fish* f = it->second;
@@ -181,15 +182,17 @@ void World::step_interact_fish(float dt){
 	    if(vabs(dist(f->get_pos(),f2->get_pos())) < reach &&
 	       f->can_eat_by_size(f2) && !f2->is_predator()){
 	      f->eat_fish(f2);
-	      remove_fish(f2);
+	      to_remove.push_back(f2);
 	    }
 	  }
 	  ++it2;
 	}
       }
     }
-    
     ++it;
+  }
+  for(uint i=0;i<to_remove.size();++i){
+    remove_fish(to_remove.at(i));
   }
 }
 void World::step_grow_fish(float dt){
